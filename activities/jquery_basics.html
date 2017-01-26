@@ -4,6 +4,36 @@
         <title> </title>
     </head>
     <body>
+        <p id="p1">Hello jQuery</p>
+        <button id="button1">Click me!</button>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>
+        $(function(){
+            $("#p1").on("mouseover" , function(){
+                
+                $("#p1").css("color" , "blue");
+            });
+            
+            $("#p1").on("mouseout" , function()
+            {
+                $("#p1").css("color" , "black");
+            });
+            
+            $("#p1").on("click" , function()
+            {
+            
+               $("#p1").css("font-size", "+=6" );
+               
+            });
+            $("#button1").on("click", function() {
+                $("#p1").hide();
+                
+            })
+            
+            
+        });
 
+        </script>
     </body>
+    
 </html>
