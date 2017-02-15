@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>IT 202 project 2 - Constantino Rodrigez </title>
+    <style>
+    #map {
+        height:500px; 
+        width:600px
+      }
+    </style>
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="css/clean-blog.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    
+    <script type="text/javascript">
+      /*
+        call getData when charts lib is loaded;  
+        call drawChart when AJAX data is returned
+      
+      
+      
+      */
+    
+      function getData () {
+        
+        // using aggregation url from class
+        var url ="https://data.cityofchicago.org/resource/7as2-ds3y.json?$query=SELECT%20community_area,count(*)%20as%20potholes%20WHERE%20status='Open'%20group%20by%20community_area%20order%20by%20community_area";
+        var url2 ="https://data.cityofchicago.org/resource/7as2-ds3y.json?$query=SELECT%20community_area,count(*)%20as%20potholes%20WHERE%20status='Open'%20group%20by%20community_area%20order%20by%20potholes";
+        $.ajax({
+            url: url,
+            method: 'GET',
+          }).done(function(data) {
+            drawTable(data);
+          });  
+           $.ajax({
+            url: url2,
+            method: 'GET',
+          }).done(function(data) {
+            drawChart(data);
+          });  
+          
+      }
+          
+          
+          google.charts.load('current', {'packages':['corechart', 'table', 'piechart']});
+          google.charts.setOnLoadCallback(getData);
+          
+          function drawTable(apidata) {
+              var data = new google.visualization.DataTable();
+              data.addColumn('string', 'community area code');
+              data.addColumn('string', 'total pothole');
+              $.each(apidata , function(i,v){
+                  var x = v.community_area;
+                  var y = v.potholes;
+                  data.addRow([x , y]);
+                  
+              });
+               var options = {'title':'total potholes by community_area',
+                       'width':1000,
+                       'height':1000};
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data, options);
+      }
+      function drawChart(apiData){
+            var data = new google.visualization.DataTable();
+        data.addColumn('string', 'community area');
+        data.addColumn('number', 'total potholes');
+       $.each(apiData, function(i,v) {
+          data.addRow([v.community_area, parseFloat(v.potholes)]);
+        });
+         var options = {'title':'total potholes by community_area order by number of potholes',
+                       'width':1000,
+                       'height':1000};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+    
+</script>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('img/pothole.JPG')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>Potholes data</h1>
+                        <hr class="small">
+                        <span class="subheading">It 202 porject 2 - Constantino Rodriguez</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            </div>
+        </div>
+    </div>
+    
+   
+    <div id="chart_div"></div>
+    <div id="table_div"></div>
+     <div id="map"></div>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyNCZik0brjtM4B8ZdPUYvPmQnDuDe58&libraries=visualization"></script>
+    <script>
+    var map, heatmap;
+    var aray;
+    function initMap(){
+              map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: {
+                    lat: 41.881832,
+                    lng: -87.623177
+                },
+            });
+            }
+   // function getPoints() {
+       //  var url = "https://data.cityofchicago.org/resource/7as2-ds3y.json?$query=select%20latitude%2Clongitude%20where%20status='Open'";
+         
+       //  var aray =[];
+       //  $.ajax({
+           //     url: url,
+          //      method: 'GET',
+          //  }).done(function(result) {
+            //    $.each(result, function(index, value) { 
+             //       aray.push(getPoints(parseFloat(value.latitude), parseFloat(value.longitude)));
+            
+             //   });
+                
+                //heatmap = new google.maps.visualization.HeatmapLayer({
+                //data: aray,
+                //map: map
+           // });
+                
+                
+        //    }// throw err;
+         //   });
+         
+   // }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyNCZik0brjtM4B8ZdPUYvPmQnDuDe58&callback=initMap"
+    sync defer></script>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                    </ul>
+                    <p class="copyright text-muted">Copyright &copy; Constantino Rodriguez 2017</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
