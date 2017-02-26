@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+        #canvas2 {
+            background-color: #ffff00;
+            z-index: 27;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <canvas id="canvas2" width="500" height="500"></canvas>
+
+    <script>
+        $(function() {
+            $("#canvas2").on("click", function(e) {
+                 startgame();
+            });
+        });
+        // set up board
+        var c2 = document.getElementById("canvas2"); 
+        var ctx2 = c2.getContext("2d");
+        //player and enemies and benefits
+        var myscore = 0;
+        var myplayer;
+        var mylive = 3;
+        myplayer = new object(25,25,10,10,"#0000ff");
+        var myEnemies = [];
+        var myBenefits = [];
+        //claer everything
+        function clearCanvas() {
+            ctx2.clearRect(0,0,500,500);
+        }
+        
+        function spawnenemies(){
+            for(var i =0; i < 5; i ++)
+            {
+                width =Math.floor(Math.random() * 100) + 10;
+                height= Math.floor(Math.random() * 100 ) + 10;
+                x = 500;
+                y = Math.floor(Math.random() * 500 ) + 1;
+                color = "#ff0000";
+                myEnemies.push(new object(width, height,x , y , color));
+            }
+        }
+        function spawnbenefits(){
+            for(var i =0; i < 3; i ++)
+            {
+                width =50
+                height=50
+                x = 500;
+                y = Math.floor(Math.random() * 500 ) + 1;
+                color = "#00FF00";
+                myBenefits.push(new object(width, height,x , y , color));
+            }
+        }
+        
+        function reset(){
+            $('#canvas2').css({"background-color":"#ffff00"});
+             myplayer = new object(25,25,10,10,"#0000ff");
+             myEnemies = [];
+             myBenefits = [];
+             myscore = 0;
+             mylive = 3;
+             spawnenemies();
+             spawnbenefits();
+             clearInterval(interval);
+             interval =setInterval(gameLoop , 33 );
+        }
+        function object( width, height , x , y , color )
+        {
+            this.width = width;
+            this.height = height;
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.update = function(){
+                ctx2.strokeStyle = color; 
+                ctx2.fillStyle = color;
+                ctx2.beginPath();
+                ctx2.fillRect(this.x, this.y, this.width,this.height); 
+            ctx2.fill();
+            ctx2.stroke();
+            };
+            this.move = function(){
+                this.x = this.x - 1;
+            };
+            this.Collision = function(otherobj) {
+                var myleft = this.x;
+                var myright = this.x + (this.width);
+                var mytop = this.y;
+                var mybottom = this.y + (this.height);
+                var otherleft = otherobj.x;
+                var otherright = otherobj.x + (otherobj.width);
+                var othertop = otherobj.y;
+                var otherbottom = otherobj.y + (otherobj.height);
+                var crash = true;
+                if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+                    crash = false;
+                    
+                }
+                return crash;
+            
+            
+                
+            };
+            this.leftcheck = function(){
+                var myleft = this.x;
+                if(myleft < 0)
+                {
+                    this.x = 500;
+                    this.y = Math.floor(Math.random() * 500) + 1 ;
+                }
+            };
+            this.moveup = function(){
+                if((this.y - 10) >= 0)
+                {
+                    this.y -=10;
+                    console.log( this.y);
+                }
+                
+            };
+            this.movedown= function(){
+                if((this.y + 10 + this.height) <=500)
+                {
+                    this.y +=10;
+                    console.log( this.y);
+                }
+            };
+        }
+        
+        function drawEnemies(){
+            for(var i =0; i < 5; i ++){
+            myEnemies[i].update();
+            }
+        }
+        function moveEnemies(){
+            for(var i =0; i < 5; i ++)
+            {
+            myEnemies[i].move();
+            myEnemies[i].leftcheck();
+            }
+        }
+        function drawBenefits(){
+            for(var i = 0; i < 3; i ++)
+            {
+            myBenefits[i].update();
+            }
+        }
+        function moveBenefits(){
+            for(var i = 0; i < 3; i ++)
+            {
+            myBenefits[i].move();
+            myBenefits[i].leftcheck();
+            }
+        }
+        function updatescore(){
+            document.getElementById("myScore").innerHTML = "total points: " + myscore ;
+            ctx2.fillText("total points: " + myscore,350,10);
+            ctx2.fillText("lives: " + mylive, 350 , 20);
+        }
+        function welcomescreen(){
+              ctx2.fillText("Use Up Arrow to move up.  Use Down Arrow  to move down.",10,20);
+            ctx2.fillText("touch the green block to get  point. click to start",10 ,40);
+            ctx2.fillText("avoid the red block",10 ,60);
+            ctx2.fillText("click to start",10,100);
+              $('#canvas2').css({"background-color":"#00FF00"});
+        }
+        function gameoverscreen(){
+             $('#canvas2').css({"background-color":"#ff0000"});
+             ctx2.fillText("Crashed! game over , press r to restart",100,100);
+             clearInterval(interval);
+        }
+        window.addEventListener("load", function() {
+          welcomescreen();
+        });
+        function startgame()
+        {
+            $('#canvas2').css({"background-color":"#ffff00"});
+            myplayer.update();
+            spawnenemies();
+            spawnbenefits();
+            drawBenefits();
+            drawEnemies();
+            interval =setInterval(gameLoop , 33 );
+        }
+        function gameLoop(){
+            clearCanvas();
+            moveBenefits();
+            moveEnemies();
+            drawBenefits();
+            drawEnemies();
+            
+            myplayer.update();
+            updatescore();
+            for(var i =0; i < 5; i ++){
+                
+            
+            if (myplayer.Collision(myEnemies[i]) == true)
+            {
+                mylive -=1;
+                myEnemies[i].x = 500;
+                if (mylive == 0)
+                {
+                    clearInterval(interval);
+                    clearCanvas();
+                    gameoverscreen();
+                    updatescore();
+                }
+            }
+            }
+            for(var i=0; i < 3; i++)
+            if (myplayer.Collision(myBenefits[i]) == true)
+            {
+                myscore +=10;
+                myBenefits[i].x = 500;
+                
+            }
+            
+            
+        }
+        
+        
+        document.onkeydown = function(e) { //Key presses
+            switch (e.keyCode) {
+                case 40: 
+                    myplayer.movedown();
+                    
+                   
+                    break;
+                case 38: 
+                    myplayer.moveup();
+                    
+                 
+                    break;
+                case 82:
+                    reset();
+                    break;
+                    }
+        };
+    </script>
+    <p>Use Up Arrow to move up.  Use Down Arrow or to move down.</p>
+    <p>touch the  green blocks to get point</p>
+    <div id="myScore">
+    total points:
+</div>
+</body>
+
+</html>
