@@ -32,13 +32,13 @@
                 console.log(e);
             })
         })
-        var c = document.getElementById("canvas"); //target our canvas, draw circle
+        var c = document.getElementById("canvas");
         var ctx = c.getContext("2d");
         function draw() {
-            ctx.strokeStyle = "#D50032"; //set color to (color) before drawing
+            ctx.strokeStyle = "#D50032";
             ctx.fillStyle = "#D50032";
             ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, 100, 0, 2 * Math.PI); //circle is halfway of canvas
+            ctx.arc(canvas.width / 2, canvas.height / 2, 100, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
             ctx.fillStyle = "#FFF"; //set color to (color) before drawing
@@ -84,29 +84,29 @@
         window.addEventListener("load", function() {
             drawCircle();
         });
-        document.onkeydown = function(e) { //Key presses
+        document.onkeydown = function(e) { 
             switch (e.keyCode) {
-                //u
+               
                 case 85: 
                     draw();
                     break;
-                    //x
+              
                 case 88: 
                     clear();
                     break;
-                    // up
+                 
                 case 38: 
                     y -= 1;
                     break;
-                    // down
+                  
                 case 40: 
                     y += 1;
                     break;
-                    // left
+                  
                 case 37: 
                     x -= 1;
                     break;
-                    // right
+                 
                 case 39: 
                     x += 1;
                     break;
