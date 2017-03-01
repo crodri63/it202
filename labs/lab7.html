@@ -34,10 +34,14 @@
              //
              console.log ("Ooops: " + error);
           });
-          db.friends.put({name: "Constantino", shoeSize: 9.5}).then (function(){
-              return db.friends.get('Constantino');
-          }).then(function (friend) {
-              console.log("Constantino has shoe size " + friend.shoeSize);
+          var db2 = new Dexie("my_database");
+          db2.version(1).stores({
+              mydata: 'name,shirtsize'
+          });
+          db2.mydata.put({name: "Constantino", shirtsize: "XXL"}).then (function(){
+              return db2.mydata.get('Constantino');
+          }).then(function (mydata) {
+              console.log("Constantino has shirt size " + mydata.shirtsize);
           }).catch(function(error) {
              console.log ("Ooops: " + error);
           });
