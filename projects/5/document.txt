@@ -1,0 +1,9 @@
+the client wanted an tips calcutors , weather forecast and some way to look up what current music is popular at the moment.
+after the first prototype was presented (only have the weather and top 100 songs ) .
+
+He wanted the content to be centered and get rid of the navigation  sidebar. and change the top 20 to top 100 music ,
+
+
+after the second prototype ( included  tips calcutors as well)
+I remove the audio preview , since it take a while to load up once i scaled to top 100.
+he prefer if i can remove the type in percentage button to slider in the tips calcutors and remove the submit button as well , prefer if it automatic done.

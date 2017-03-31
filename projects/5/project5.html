@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.yellow-cyan.min.css" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <title>it202 project 5 app</title>
+        <link rel="manifest" href="/manifest.json">
+
+    </head>
+    <body>
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            
+            <!-- Simple header with fixed tabs. -->
+            <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+                <header class="mdl-layout__header">
+                    <div class="mdl-layout__header-row">
+                        <!-- Title -->
+                        <span class="mdl-layout-title">Constantino Rodriguez IT202 Project 5</span>
+                    </div>
+                        <!-- Tabs -->
+                    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                        <a href="#fixed-tab-1" class="mdl-layout__tab is-active">forecast weather</a>
+                        <a href="#fixed-tab-2" class="mdl-layout__tab">Today hits</a>
+                        <a href="#fixed-tab-3" class="mdl-layout__tab">Tips Calculator</a>
+                        <a href="#fixed-tab-4" class="mdl-layout__tab">Dev</a>
+                    </div>
+                </header>
+            <main class="mdl-layout__content" style="background-color: grey;">
+                <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+                        <div class="page-content">
+                        <table class="mdl-data-table mdl-js-data-table" id= "weathertable" style=" margin: 0 auto">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">date</th>
+                                <th class="mdl-data-table__cell--non-numeric">day </th>
+                                <th class="mdl-data-table__cell--non-numeric">high</th>
+                                <th class="mdl-data-table__cell--non-numeric">low</th>
+                                <th class="mdl-data-table__cell--non-numeric">weather</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="fixed-tab-2" >
+                    <div class="page-content"> 
+                    <table class="mdl-data-table mdl-js-data-table" id="musictable" style=" margin: 0 auto">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Top 100</th>
+                                <th class="mdl-data-table__cell--non-numeric">title and artist </th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="fixed-tab-3">
+                     <div class="page-content" style ="margin:0 auto">
+                         <div class="demo-card-wide mdl-card mdl-shadow--2dp" style=" margin: 0 auto" >
+                             <p>Total bill amount : $ 
+                             <input type="text" id="cash" class="amount-field"> 
+                             </p>
+                             <br>
+                             <p>Tip Percentage:</p>
+                             <input type="range" min="0" max="100" value="0" step="1" onchange="tip(this.value, 'cash')" class="range-style">
+                             <span id="slideval">0%</span>
+                             <p>Tip to leave =
+                             <span id="tipamount" class="tip-amount">$0.00</span>
+                             </p>    
+                            </div>
+                    </div>
+                </section>
+                 <section class="mdl-layout__tab-panel" id="fixed-tab-4" >
+                    <div class="page-content"> 
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style=" margin: 0 auto" >
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">Developer</h2>
+                            </div>
+                            <div class="mdl-card__supporting-text">
+                               Developed by Constantino Rodriguez, an UIC Computer science undergrad student. This Website is Created for IT202 Project 5: 3 screen app.
+                            </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"  href="https://github.com/crodri63" >
+                                link to my github
+                            </a>
+                        </div>
+                     <div class="mdl-card__menu">
+                    </div>
+                    </div>
+                </section>
+                
+                
+                
+            </main>
+        </div>
+        
+        
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+          <script>
+          $(function(){
+              var url = "https://itunes.apple.com/us/rss/topsongs/limit=100/explicit=true/json";
+              $.ajax({
+                  url: url,
+                  dataType : 'json',
+                  method: 'GET',
+                  
+              }).done(function(result) {
+                  //console.log(result);
+                  $.each(result ,function(idx,val){
+                  // get song name
+                  for (var i = 0; i < 100; i++){
+                      //console.log(val.entry[i].title.label);
+                      // get image
+                      //console.log(val.entry[i]["im:image"]["0"].label);
+                      // link to itunes store
+                      //console.log(val.entry[i].link["0"].attributes.href);
+                      addrowtomusic(val.entry[i]["im:image"]["0"].label,val.entry[i].title.label ,val.entry[i].link["0"].attributes.href);
+                  }
+      
+  });
+}).fail(function(err) {
+  throw err;
+});
+var url2 = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22Chicago%2CIl%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+$.ajax({
+    url: url2,
+    dataType : 'json',
+    method: 'GET',
+    
+}).done(function(result){
+    //console.log(result);
+   
+    $.each(result, function( idx , val){
+        for(var i =0; i < 10; i++)
+        {
+       // console.log(val.results.channel.item.forecast[i].date);
+       // console.log(val.results.channel.item.forecast[i].day);
+       // console.log(val.results.channel.item.forecast[i].high);
+       // console.log(val.results.channel.item.forecast[i].low);
+       // console.log(val.results.channel.item.forecast[i].text);
+        addrowtoweather(val.results.channel.item.forecast[i].date,val.results.channel.item.forecast[i].day,val.results.channel.item.forecast[i].high, val.results.channel.item.forecast[i].low,val.results.channel.item.forecast[i].text);
+        }
+    });
+});
+
+
+});
+function addrowtomusic(image , title , link){
+
+    $('#musictable tbody').append('<tr><td><img src="'+ image +'" alt="" height=55 width=55></img></td> <td class="mdl-data-table__cell--non-numeric">' + title +'</td> </tr>');
+    
+}
+function addrowtoweather(date , day , high, low,text){
+
+    $('#weathertable tbody').append('<tr><td class="mdl-data-table__cell--non-numeric">' + date +'</td> <td class="mdl-data-table__cell--non-numeric">' + day +'</td> <td class="mdl-data-table__cell--non-numeric">' + high +'</td> <td class="mdl-data-table__cell--non-numeric">' + low +'</td> <td class="mdl-data-table__cell--non-numeric">' + text +'</td></tr>');
+    
+}
+
+function tip(slider, cash){
+  var tip = document.getElementById('tipamount');
+  var slideval = document.getElementById('slideval');
+  var cash = document.getElementById(cash).value;
+  var prcnt = slider * .01;
+  
+  if (cash == null || cash == '') {
+    tip.innerHTML = 'Please enter an amount';
+    return false;
+  }
+  if(isNaN(cash)) {
+    tip.innerHTML = 'Please enter a number';
+    return false;
+  }
+  if(cash >= 0){
+    tip.innerHTML = '$' + (cash * prcnt) .toFixed(2);
+  slideval.innerHTML = slider + '%';
+  }
+}
+
+
+     if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
+          .then(function(registration) {
+               // console.log('Service Worker Registered');
+          });
+
+        navigator.serviceWorker.ready.then(function(registration) {
+         //  console.log('Service Worker Ready');
+        });
+      }
+
+
+
+</script>
+</body>
+
+</html>
