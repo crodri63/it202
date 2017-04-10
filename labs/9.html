@@ -129,7 +129,7 @@
          
          db.shopList .each (function(item){
              
-             var html = item.store + "<br>" + item.category +"<br>" ;
+             var html = item.store + "<br>" + item.category +"<br>" + item.name + "<br>" + item.price +"<br>" + item.quantity + "<br>"  ;
              $("#List").append(html);
          });
          
@@ -144,7 +144,8 @@
              
          });
          
-         $("#buttonsearch").on("click" , function() {
+      /*  
+      $("#buttonsearch").on("click" , function() {
              db.shopList
              $("#List").
              .where('name')
@@ -155,6 +156,7 @@
              
              
          })
+         */
 </script>
 
     </body>
