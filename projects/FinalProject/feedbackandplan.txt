@@ -1,0 +1,14 @@
+The link to the  Big Project Description and Plan
+https://docs.google.com/document/d/1JjTzxNski7QAWe12CRdghP_ONI0HH5eQ5Oi0hHYmDsM/edit
+
+
+User feedback - status
+--------------------------
+Unable to see the words on sides. - Fixed
+cannot see the whole list of contact after search - fixed
+button randomly disappear under the smite tab - fixed
+\n is appears in the smite lore of god - still issues
+some images is stretch - still issues
+sometime the name of the resturant is missing while clicking the marker - still issues
+the context is sometime not in the middle , usually start on side - fixed 
+undefined appears on some of the column in the resturant tab - issues
